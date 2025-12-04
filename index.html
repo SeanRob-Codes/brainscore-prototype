@@ -1,0 +1,1529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>BrainScore™ Prototype – Cognitive Credit System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #020617;
+      --bg-soft: #020617;
+      --panel: #020617;
+      --panel-alt: #030712;
+      --accent: #6366f1;
+      --accent-2: #ec4899;
+      --accent-soft: #6366f133;
+      --accent-strong: #a855f7;
+      --danger: #ef4444;
+      --success: #22c55e;
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --border-subtle: #111827;
+      --radius-xl: 20px;
+      --radius-lg: 14px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 22px 50px #000000dd;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 0% 0%, #22c55e2a 0, transparent 52%),
+        radial-gradient(circle at 100% 0%, #6366f12a 0, transparent 50%),
+        radial-gradient(circle at 0% 100%, #ec48992b 0, transparent 55%),
+        radial-gradient(circle at 100% 100%, #0ea5e92a 0, transparent 60%),
+        #020617;
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 1200px;
+      background: radial-gradient(circle at top left, #1e293b, #020617);
+      border-radius: 24px;
+      border: 1px solid #1f2937;
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+      backdrop-filter: blur(18px);
+    }
+
+    header {
+      padding: 18px 22px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #111827;
+      background:
+        radial-gradient(circle at top left, #6366f133 0, transparent 60%),
+        radial-gradient(circle at top right, #ec489933 0, transparent 60%);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 16px;
+      border: 1px solid #4b5563;
+      background:
+        radial-gradient(circle at 20% 0%, #6366f1 0, transparent 55%),
+        radial-gradient(circle at 80% 120%, #ec4899 0, transparent 55%),
+        #020617;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      font-size: 17px;
+      color: #f9fafb;
+      box-shadow: 0 0 18px #6366f155;
+    }
+
+    .brand-text-main {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .brand-text-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .header-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+    }
+
+    .mode-pill {
+      padding: 7px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--accent-soft);
+      background: #020617bb;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #c4b5fd;
+    }
+
+    .mode-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 40% 0%, #22c55e, #22c55e);
+      box-shadow: 0 0 12px #22c55eaa;
+    }
+
+    .mini-text {
+      font-size: 11px;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    main {
+      padding: 14px 18px 18px;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 14px;
+    }
+
+    @media (max-width: 900px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .section-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: #9ca3af;
+      margin-bottom: 8px;
+    }
+
+    .card {
+      background: radial-gradient(circle at top, #1f2937 0, #020617 60%);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border-subtle);
+      padding: 14px 14px 16px;
+      box-shadow: 0 16px 28px #000000b5;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 0% 0%, #6366f133 0, transparent 50%),
+        radial-gradient(circle at 100% 0%, #ec489933 0, transparent 55%);
+      opacity: 0.7;
+      mix-blend-mode: screen;
+    }
+
+    .card-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .grid-two {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 10px;
+    }
+
+    @media (max-width: 900px) {
+      .grid-two {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .score-main {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .score-circle {
+      width: 110px;
+      height: 110px;
+      border-radius: 999px;
+      background:
+        conic-gradient(from 220deg,
+          #22c55e 0deg,
+          #22c55e 150deg,
+          #6366f1 230deg,
+          #ec4899 320deg,
+          #22c55e 360deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      box-shadow: 0 0 30px #6366f166;
+    }
+
+    .score-circle-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: inherit;
+      background: #020617;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+    }
+
+    .score-value {
+      font-size: 30px;
+      font-weight: 700;
+    }
+
+    .score-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--text-muted);
+    }
+
+    .trend-tag {
+      font-size: 11px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 9px;
+      border-radius: var(--radius-pill);
+      border: 1px solid #1f2937;
+      background: #020617bb;
+      color: #e5e7eb;
+    }
+
+    .trend-tag span {
+      font-size: 13px;
+    }
+
+    .rank-pill {
+      margin-top: 6px;
+      display: inline-flex;
+      padding: 4px 9px;
+      border-radius: var(--radius-pill);
+      border: 1px solid #4b5563;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #a5b4fc;
+      background: #020617de;
+    }
+
+    .battery-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-top: 8px;
+    }
+
+    .battery-label-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+    }
+
+    .battery-shell {
+      height: 9px;
+      border-radius: 999px;
+      background: #020617;
+      border: 1px solid #111827;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .battery-fill {
+      position: absolute;
+      inset: 0;
+      transform-origin: left center;
+      background: linear-gradient(90deg, #22c55e, #6366f1, #ec4899);
+      box-shadow: 0 0 16px #6366f155;
+    }
+
+    .day-grid {
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      font-size: 12px;
+    }
+
+    @media (max-width: 600px) {
+      .day-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .mini-card {
+      border-radius: var(--radius-lg);
+      border: 1px solid #111827;
+      background: #020617e0;
+      padding: 8px 9px;
+    }
+
+    .mini-label {
+      font-size: 11px;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      margin-bottom: 2px;
+    }
+
+    .mini-main {
+      font-size: 13px;
+    }
+
+    .mini-sub {
+      font-size: 11px;
+      color: #6b7280;
+      margin-top: 2px;
+    }
+
+    .btn-row {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .btn-main {
+      border-radius: var(--radius-pill);
+      border: none;
+      padding: 9px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      cursor: pointer;
+      background: linear-gradient(120deg, #6366f1, #ec4899);
+      color: #f9fafb;
+      box-shadow: 0 16px 30px #000000ea;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.08s ease;
+    }
+
+    .btn-main:hover {
+      filter: brightness(1.08);
+      transform: translateY(-1px);
+      box-shadow: 0 20px 40px #000000f0;
+    }
+
+    .btn-main:active {
+      transform: translateY(0);
+      box-shadow: 0 12px 22px #000000da;
+    }
+
+    .btn-ghost {
+      border-radius: var(--radius-pill);
+      border: 1px dashed #4b5563;
+      padding: 8px 10px;
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      cursor: pointer;
+      background: #020617dd;
+      color: #9ca3af;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-ghost span.dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      border: 1px solid #4b5563;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+    }
+
+    /* Tests panel */
+
+    .tests-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 6px;
+      font-size: 12px;
+    }
+
+    @media (max-width: 900px) {
+      .tests-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .test-card {
+      border-radius: var(--radius-lg);
+      border: 1px solid #111827;
+      background: #020617ec;
+      padding: 8px 9px 9px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .test-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #e5e7eb;
+    }
+
+    .test-desc {
+      font-size: 11px;
+      color: #9ca3af;
+    }
+
+    .test-status {
+      font-size: 11px;
+      color: #a5b4fc;
+    }
+
+    .badge-soft {
+      display: inline-flex;
+      padding: 2px 7px;
+      border-radius: var(--radius-pill);
+      border: 1px solid #111827;
+      font-size: 10px;
+      color: #9ca3af;
+      margin-top: 2px;
+    }
+
+    .badge-soft strong {
+      color: #c4b5fd;
+    }
+
+    .test-btn {
+      margin-top: 4px;
+      align-self: flex-start;
+      border-radius: var(--radius-pill);
+      border: 1px solid #4b5563;
+      padding: 6px 9px;
+      font-size: 11px;
+      cursor: pointer;
+      background: #020617;
+      color: #e5e7eb;
+    }
+
+    .test-btn:hover {
+      border-color: var(--accent);
+    }
+
+    /* Right column content */
+
+    .scroll-col {
+      max-height: 530px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .history-list {
+      margin-top: 7px;
+      font-size: 12px;
+    }
+
+    .history-row {
+      padding: 5px 0;
+      border-bottom: 1px solid #020617;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .history-label-row {
+      display: flex;
+      justify-content: space-between;
+      color: #9ca3af;
+      font-size: 11px;
+    }
+
+    .hist-shell {
+      margin-top: 1px;
+      height: 8px;
+      border-radius: 999px;
+      border: 1px solid #111827;
+      background: #020617;
+      overflow: hidden;
+    }
+
+    .hist-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #22c55e, #6366f1, #ec4899);
+      box-shadow: 0 0 12px #6366f166;
+      transform-origin: left center;
+    }
+
+    .code-block {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 11px;
+      border-radius: 10px;
+      border: 1px solid #111827;
+      background: #020617;
+      padding: 7px 8px;
+      color: #9ca3af;
+      margin-top: 8px;
+      white-space: pre;
+      overflow-x: auto;
+    }
+
+    .gauntlet-card {
+      margin-top: 10px;
+      border-radius: var(--radius-lg);
+      border: 1px solid #111827;
+      background: #020617f0;
+      padding: 8px 9px 10px;
+      font-size: 12px;
+    }
+
+    .gauntlet-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+
+    .gauntlet-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    .strike-indicator span {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border-radius: 999px;
+      border: 1px solid #4b5563;
+      margin-left: 3px;
+    }
+
+    .strike-indicator span.active {
+      background: #b91c1c;
+      box-shadow: 0 0 12px #b91c1caa;
+    }
+
+    .gauntlet-question {
+      margin-top: 4px;
+      font-size: 13px;
+    }
+
+    .gauntlet-meta {
+      margin-top: 2px;
+      font-size: 11px;
+      color: #9ca3af;
+    }
+
+    .choice-row {
+      margin-top: 6px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+
+    @media (max-width: 900px) {
+      .choice-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .choice-btn {
+      border-radius: var(--radius-pill);
+      border: 1px solid #111827;
+      padding: 7px 8px;
+      font-size: 12px;
+      background: #020617;
+      color: #e5e7eb;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .choice-btn:hover {
+      border-color: var(--accent-strong);
+    }
+
+    .gauntlet-footer {
+      margin-top: 6px;
+      font-size: 11px;
+      color: #9ca3af;
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+    }
+
+    .warning-text {
+      margin-top: 8px;
+      font-size: 11px;
+      color: #9ca3af;
+    }
+
+    .warning-text strong {
+      color: var(--accent-strong);
+    }
+
+    footer {
+      padding: 6px 16px 12px;
+      border-top: 1px dashed #111827;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #4b5563;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .pill-mini {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      border-radius: var(--radius-pill);
+      border: 1px solid #111827;
+      padding: 2px 7px;
+      font-size: 10px;
+      color: #9ca3af;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #1f2937;
+      border-radius: 999px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="brand">
+        <div class="brand-logo">BS</div>
+        <div>
+          <div class="brand-text-main">BrainScore™</div>
+          <div class="brand-text-sub">Cognitive Credit · Daily Score · Trivia Gauntlet</div>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="mode-pill">
+          <span class="mode-dot"></span>
+          LIVE COGNITIVE INDEX
+        </div>
+        <div class="mini-text">Weather app for your mind · Prototype</div>
+      </div>
+    </header>
+
+    <main>
+      <!-- LEFT: SCORE + TESTS -->
+      <section>
+        <h2 class="section-title">Today · BrainScore Card</h2>
+        <div class="card">
+          <div class="card-inner">
+            <div class="grid-two">
+              <div>
+                <div class="score-main">
+                  <div class="score-circle">
+                    <div class="score-circle-inner">
+                      <div id="scoreValue" class="score-value">500</div>
+                      <div class="score-label">BrainScore Index</div>
+                      <div id="rankLabel" class="pill-mini" style="margin-top:4px;">Rank: Bronze</div>
+                    </div>
+                  </div>
+                  <div>
+                    <div id="trendTag" class="trend-tag">
+                      <span>⇅</span>
+                      <span>Trend: neutral</span>
+                    </div>
+                    <div class="rank-pill" id="peakLabel">
+                      Peak Focus Window: 14:00–17:00
+                    </div>
+                    <div class="battery-row">
+                      <div class="battery-label-row">
+                        <span>Cognitive Battery</span>
+                        <span id="batteryText">-- %</span>
+                      </div>
+                      <div class="battery-shell">
+                        <div id="batteryFill" class="battery-fill" style="transform:scaleX(0);"></div>
+                      </div>
+                    </div>
+                    <div class="battery-row">
+                      <div class="battery-label-row">
+                        <span>Fatigue Level</span>
+                        <span id="fatigueText">--</span>
+                      </div>
+                      <div class="battery-shell">
+                        <div id="fatigueFill" class="battery-fill" style="transform:scaleX(0);background:linear-gradient(90deg,#22c55e,#eab308,#ef4444);"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="day-grid">
+                  <div class="mini-card">
+                    <div class="mini-label">Focus Intel</div>
+                    <div id="focusSummary" class="mini-main">Run a couple of tests to unlock today’s forecast.</div>
+                    <div class="mini-sub">BrainScore updates in real-time as you play with tests + trivia.</div>
+                  </div>
+                  <div class="mini-card">
+                    <div class="mini-label">Daily Advice</div>
+                    <div id="adviceText" class="mini-main">Complete at least one mini-test and one Gauntlet run.</div>
+                    <div class="mini-sub">Treat this as a thinking gym session, not a diagnosis.</div>
+                  </div>
+                </div>
+
+                <div class="btn-row">
+                  <button id="newDayBtn" class="btn-ghost">
+                    <span class="dot">⟳</span>
+                    New Day Snapshot
+                  </button>
+                  <button id="saveSnapshotBtn" class="btn-main">
+                    Save Score to History
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <div class="mini-label" style="margin-bottom:4px;">Mini Cognitive Drills</div>
+                <div class="tests-grid">
+                  <div class="test-card">
+                    <div class="test-title">Reaction Pulse</div>
+                    <div class="test-desc">Click as fast as you can when the screen glows.</div>
+                    <div id="reactionStatus" class="test-status">Not run yet.</div>
+                    <div class="badge-soft"><strong>Metric:</strong>&nbsp;Reaction time (ms)</div>
+                    <button id="reactionBtn" class="test-btn">Run Reaction Test</button>
+                  </div>
+                  <div class="test-card">
+                    <div class="test-title">Memory Flash</div>
+                    <div class="test-desc">Watch a digit sequence, then type it back from memory.</div>
+                    <div id="memoryStatus" class="test-status">Not run yet.</div>
+                    <div class="badge-soft"><strong>Metric:</strong>&nbsp;Working memory</div>
+                    <button id="memoryBtn" class="test-btn">Run Memory Test</button>
+                  </div>
+                  <div class="test-card">
+                    <div class="test-title">Logic Snap</div>
+                    <div class="test-desc">Answer a quick pattern / logic question under light pressure.</div>
+                    <div id="logicStatus" class="test-status">Not run yet.</div>
+                    <div class="badge-soft"><strong>Metric:</strong>&nbsp;Reasoning &amp; decision speed</div>
+                    <button id="logicBtn" class="test-btn">Run Logic Test</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- RIGHT: HISTORY + GAUNTLET -->
+      <section class="scroll-col">
+        <h2 class="section-title">History · Gauntlet · Debug View</h2>
+        <div class="card">
+          <div class="card-inner">
+            <div>
+              <div class="mini-label">BrainScore History</div>
+              <div class="mini-sub">Stored locally in your browser – perfect for demos.</div>
+              <div id="historyList" class="history-list"></div>
+            </div>
+
+            <div class="gauntlet-card">
+              <div class="gauntlet-header">
+                <div>
+                  <div class="gauntlet-title">Trivia Gauntlet</div>
+                  <div class="mini-sub">All subjects · timed · 3 strikes and the run is over.</div>
+                </div>
+                <div class="strike-indicator" id="strikeIndicator">
+                  <span></span><span></span><span></span>
+                </div>
+              </div>
+
+              <div id="gauntletBody">
+                <p class="mini-main">Hit “Start Gauntlet” to prove your brain deserves its score.</p>
+              </div>
+
+              <div class="gauntlet-footer">
+                <span id="gauntletMetaLeft">Run: 0 correct · 0 wrong</span>
+                <span id="gauntletMetaRight">Score impact: 0</span>
+              </div>
+
+              <div class="btn-row" style="margin-top:8px;">
+                <button id="startGauntletBtn" class="btn-main" style="padding-inline:12px;">
+                  Start Gauntlet
+                </button>
+                <button id="resetGauntletBtn" class="btn-ghost">
+                  <span class="dot">×</span>
+                  Reset Run
+                </button>
+              </div>
+            </div>
+
+            <div class="code-block" id="debugBlock">
+BrainScore Debug:
+  current_score: 500
+  trend_delta:   0
+  reaction_ms:   —
+  memory_score:  —
+  logic_score:   —
+  gauntlet_delta:0
+            </div>
+
+            <p class="warning-text">
+              <strong>Disclaimer:</strong> This is a conceptual prototype for demos, interviews, and product pitches.
+              It is <em>not</em> a clinical tool. BrainScore should always be framed as “cognitive training + gaming,”
+              not medical advice.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>BrainScore™ Cognitive Credit · Local Prototype</span>
+      <span>Data stored in browser only · Safe for live demos</span>
+    </footer>
+  </div>
+
+  <script>
+    // ---------- Core State ----------
+    const state = {
+      baseScore: 500,
+      currentScore: 500,
+      previousScore: 500,
+      trend: 0,
+      battery: 0.65,
+      fatigue: 0.35,
+      reactionMs: null,
+      memoryScore: null,
+      logicScore: null,
+      gauntletDelta: 0,
+      history: [],
+      gauntlet: {
+        active: false,
+        strikes: 0,
+        correct: 0,
+        wrong: 0,
+        questionIndex: null,
+        usedIndices: new Set()
+      }
+    };
+
+    const STORAGE_KEY = "brainScorePrototypeHistory";
+
+    function clamp(val, min, max) {
+      return Math.min(max, Math.max(min, val));
+    }
+
+    // ---------- History Persistence ----------
+    function loadHistory() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const data = JSON.parse(raw);
+          if (Array.isArray(data)) {
+            state.history = data;
+          }
+        }
+      } catch (e) {
+        console.warn("History load failed", e);
+      }
+      renderHistory();
+    }
+
+    function saveHistory() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state.history));
+      } catch (e) {
+        console.warn("History save failed", e);
+      }
+    }
+
+    // ---------- Rank & Summary ----------
+    function getRank(score) {
+      if (score >= 900) return "Apex Mind";
+      if (score >= 820) return "Genius";
+      if (score >= 740) return "Elite";
+      if (score >= 670) return "Diamond";
+      if (score >= 600) return "Platinum";
+      if (score >= 540) return "Gold";
+      if (score >= 480) return "Silver";
+      return "Bronze";
+    }
+
+    function randomPeakWindow() {
+      const windows = [
+        "07:00–10:00",
+        "09:00–12:00",
+        "13:00–16:00",
+        "14:00–17:00",
+        "18:00–21:00"
+      ];
+      return windows[Math.floor(Math.random() * windows.length)];
+    }
+
+    function randomAdvice() {
+      const options = [
+        "Front-load deep work into your peak hours; leave admin tasks for low-battery windows.",
+        "Use short sprints: 25 minutes of focus, 5 minutes of cognitive reset.",
+        "Protect your best brain hours from notifications and context switching.",
+        "Run the Gauntlet when you feel sharp – it punishes autopilot.",
+        "Combine a reaction test with the Gauntlet to warm up your brain."
+      ];
+      return options[Math.floor(Math.random() * options.length)];
+    }
+
+    function randomFocusSummary() {
+      const options = [
+        "Your speed looks decent. Today is about consistency, not perfection.",
+        "You’re sharper after a bit of warm-up – schedule hard tasks mid-block.",
+        "Your brain likes short, intense bursts over long marathons today.",
+        "Decision speed is solid; protect it from distractions.",
+        "Memory and logic are balanced – perfect time to learn something new."
+      ];
+      return options[Math.floor(Math.random() * options.length)];
+    }
+
+    // ---------- Score Calculation ----------
+    function recomputeScore() {
+      let score = state.baseScore;
+
+      // Reaction: 150–450 ms → bonus/penalty
+      if (state.reactionMs != null) {
+        const ms = state.reactionMs;
+        let delta;
+        if (ms < 150) delta = 40;
+        else if (ms <= 220) delta = 70;
+        else if (ms <= 280) delta = 50;
+        else if (ms <= 350) delta = 20;
+        else if (ms <= 450) delta = -10;
+        else delta = -30;
+        score += delta;
+      }
+
+      // Memory score: 0–1
+      if (state.memoryScore != null) {
+        score += (state.memoryScore - 0.5) * 120;
+      }
+
+      // Logic score: 0, 0.5, 1
+      if (state.logicScore != null) {
+        score += (state.logicScore - 0.5) * 100;
+      }
+
+      // Gauntlet delta
+      score += state.gauntletDelta;
+
+      // Lightly weight by battery/fatigue
+      score += (state.battery - 0.6) * 80;
+      score -= state.fatigue * 40;
+
+      state.previousScore = state.currentScore;
+      state.currentScore = clamp(Math.round(score), 0, 1000);
+      state.trend = state.currentScore - state.previousScore;
+
+      const trendTag = document.getElementById("trendTag");
+      const trendTextSpan = trendTag.querySelector("span:nth-child(2)");
+      const arrowSpan = trendTag.querySelector("span:nth-child(1)");
+      let label = "neutral";
+      let arrow = "⇅";
+
+      if (state.trend > 5) {
+        label = "+" + state.trend + " today";
+        arrow = "⬆";
+      } else if (state.trend < -5) {
+        label = state.trend + " today";
+        arrow = "⬇";
+      }
+
+      arrowSpan.textContent = arrow;
+      trendTextSpan.textContent = "Trend: " + label;
+
+      document.getElementById("scoreValue").textContent = state.currentScore;
+      const rank = getRank(state.currentScore);
+      document.getElementById("rankLabel").textContent = "Rank: " + rank;
+
+      // Battery & fatigue bars
+      const batteryEl = document.getElementById("batteryFill");
+      const fatigueEl = document.getElementById("fatigueFill");
+      batteryEl.style.transform = "scaleX(" + clamp(state.battery, 0, 1) + ")";
+      fatigueEl.style.transform = "scaleX(" + clamp(state.fatigue, 0, 1) + ")";
+      document.getElementById("batteryText").textContent =
+        Math.round(state.battery * 100) + "%";
+      const fatigueLabel =
+        state.fatigue < 0.3 ? "Low" :
+        state.fatigue < 0.6 ? "Moderate" : "High";
+      document.getElementById("fatigueText").textContent =
+        fatigueLabel + " (" + Math.round(state.fatigue * 100) + "%)";
+
+      // Update daily labels
+      document.getElementById("peakLabel").textContent =
+        "Peak Focus Window: " + randomPeakWindow();
+      document.getElementById("focusSummary").textContent =
+        randomFocusSummary();
+      document.getElementById("adviceText").textContent =
+        randomAdvice();
+
+      refreshDebugBlock();
+    }
+
+    function refreshDebugBlock() {
+      const debug = [
+        "BrainScore Debug:",
+        "  current_score: " + state.currentScore,
+        "  trend_delta:   " + state.trend,
+        "  reaction_ms:   " + (state.reactionMs != null ? state.reactionMs.toFixed(0) : "—"),
+        "  memory_score:  " + (state.memoryScore != null ? state.memoryScore.toFixed(2) : "—"),
+        "  logic_score:   " + (state.logicScore != null ? state.logicScore.toFixed(2) : "—"),
+        "  gauntlet_delta:" + state.gauntletDelta
+      ].join("\n");
+      document.getElementById("debugBlock").textContent = debug;
+    }
+
+    // ---------- History UI ----------
+    function renderHistory() {
+      const list = document.getElementById("historyList");
+      if (!state.history.length) {
+        list.innerHTML = "<p class='mini-main'>No saved days yet. Hit <strong>Save Score to History</strong> after a session.</p>";
+        return;
+      }
+      const maxScore = Math.max(...state.history.map(h => h.score), 1);
+      list.innerHTML = state.history.slice(-10).map(h => {
+        const width = (h.score / maxScore) || 0;
+        return `
+          <div class="history-row">
+            <div class="history-label-row">
+              <span>${h.date}</span>
+              <span>${h.score}</span>
+            </div>
+            <div class="hist-shell">
+              <div class="hist-fill" style="transform:scaleX(${clamp(width,0,1)});"></div>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function saveSnapshot() {
+      const now = new Date();
+      const label = now.toLocaleDateString() + " · " +
+        now.toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"});
+      state.history.push({ date: label, score: state.currentScore });
+      saveHistory();
+      renderHistory();
+    }
+
+    // ---------- New Day ----------
+    function newDay() {
+      state.battery = 0.6 + (Math.random() * 0.3 - 0.15);
+      state.battery = clamp(state.battery, 0.3, 1);
+      state.fatigue = clamp(0.4 + (Math.random() * 0.3 - 0.15), 0, 1);
+      state.reactionMs = null;
+      state.memoryScore = null;
+      state.logicScore = null;
+      state.gauntletDelta = 0;
+      document.getElementById("reactionStatus").textContent = "Not run yet.";
+      document.getElementById("memoryStatus").textContent = "Not run yet.";
+      document.getElementById("logicStatus").textContent = "Not run yet.";
+      resetGauntlet(true);
+      recomputeScore();
+    }
+
+    // ---------- Reaction Test ----------
+    function runReactionTest() {
+      const status = document.getElementById("reactionStatus");
+      status.textContent = "Wait for the glow…";
+      status.style.color = "#fbbf24";
+
+      let armed = true;
+      let timeoutId;
+      const overlay = document.createElement("div");
+      overlay.style.position = "fixed";
+      overlay.style.inset = "0";
+      overlay.style.background = "#020617";
+      overlay.style.display = "flex";
+      overlay.style.alignItems = "center";
+      overlay.style.justifyContent = "center";
+      overlay.style.zIndex = "99";
+      overlay.style.cursor = "pointer";
+      overlay.innerHTML = `
+        <div style="text-align:center;max-width:320px;">
+          <div style="font-size:14px;color:#9ca3af;margin-bottom:10px;text-transform:uppercase;letter-spacing:0.16em;">Reaction Pulse</div>
+          <div id="reactionPrompt" style="font-size:16px;">Wait for the screen to glow purple, then tap anywhere as fast as possible.</div>
+        </div>
+      `;
+      document.body.appendChild(overlay);
+
+      let startTime = 0;
+      const delay = 1000 + Math.random() * 3000;
+
+      timeoutId = setTimeout(() => {
+        overlay.style.background = "radial-gradient(circle at 50% 0%, #a855f7 0, #020617 55%)";
+        document.getElementById("reactionPrompt").textContent = "GO! Click / tap now!";
+        startTime = performance.now();
+        armed = false;
+      }, delay);
+
+      function cleanup() {
+        overlay.removeEventListener("click", clickHandler);
+        overlay.remove();
+        clearTimeout(timeoutId);
+      }
+
+      function clickHandler() {
+        if (startTime === 0) {
+          // clicked too early
+          cleanup();
+          status.textContent = "Jumped early – no score.";
+          status.style.color = "#f97316";
+          return;
+        }
+        const end = performance.now();
+        const ms = end - startTime;
+        cleanup();
+        state.reactionMs = ms;
+        const rounded = Math.round(ms);
+        status.textContent = "Result: " + rounded + " ms";
+        status.style.color = "#a5b4fc";
+        recomputeScore();
+      }
+
+      overlay.addEventListener("click", clickHandler);
+    }
+
+    // ---------- Memory Test ----------
+    function runMemoryTest() {
+      const status = document.getElementById("memoryStatus");
+      const length = 6 + Math.floor(Math.random() * 3);
+      let seq = "";
+      for (let i = 0; i < length; i++) {
+        seq += Math.floor(Math.random() * 10).toString();
+      }
+
+      const overlay = document.createElement("div");
+      overlay.style.position = "fixed";
+      overlay.style.inset = "0";
+      overlay.style.background = "#020617";
+      overlay.style.display = "flex";
+      overlay.style.alignItems = "center";
+      overlay.style.justifyContent = "center";
+      overlay.style.zIndex = "99";
+
+      overlay.innerHTML = `
+        <div style="text-align:center;max-width:340px;">
+          <div style="font-size:14px;color:#9ca3af;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.16em;">Memory Flash</div>
+          <div id="sequenceBox" style="font-size:24px;font-weight:600;letter-spacing:0.2em;margin-bottom:12px;">${seq}</div>
+          <div id="memoryPhaseText" style="font-size:13px;color:#9ca3af;">Memorize this sequence. It will vanish in 3 seconds.</div>
+          <div id="inputBox" style="display:none;margin-top:10px;">
+            <input id="memoryInput" type="text" autocomplete="off"
+              style="width:100%;padding:6px 8px;border-radius:999px;border:1px solid #374151;background:#020617;color:#e5e7eb;font-size:14px;text-align:center;letter-spacing:0.18em;"/>
+            <button id="memorySubmit" style="margin-top:8px;border-radius:999px;border:1px solid #4b5563;padding:6px 10px;font-size:12px;background:#020617;color:#e5e7eb;cursor:pointer;">Submit</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(overlay);
+
+      setTimeout(() => {
+        document.getElementById("sequenceBox").textContent = "● ● ● ● ● ●";
+        document.getElementById("memoryPhaseText").textContent = "Type the digits back in order.";
+        document.getElementById("inputBox").style.display = "block";
+        document.getElementById("memoryInput").focus();
+      }, 3000);
+
+      function finish() {
+        const input = document.getElementById("memoryInput").value.trim();
+        let correct = 0;
+        for (let i = 0; i < seq.length; i++) {
+          if (input[i] === seq[i]) correct++;
+        }
+        const ratio = correct / seq.length;
+        state.memoryScore = ratio;
+        status.textContent = "Accuracy: " + correct + "/" + seq.length +
+          " (" + Math.round(ratio * 100) + "%)";
+        status.style.color = "#a5b4fc";
+        recomputeScore();
+        overlay.removeEventListener("click", dismissOnBg);
+        overlay.remove();
+      }
+
+      function dismissOnBg(e) {
+        if (e.target === overlay) {
+          finish();
+        }
+      }
+
+      overlay.addEventListener("click", dismissOnBg);
+      overlay.querySelector("#memorySubmit").addEventListener("click", finish);
+    }
+
+    // ---------- Logic Test ----------
+    function runLogicTest() {
+      const status = document.getElementById("logicStatus");
+      const questions = [
+        {
+          q: "What number comes next: 2, 4, 8, 16, ?",
+          answer: "32"
+        },
+        {
+          q: "Finish the pattern: A, C, E, G, ?",
+          answer: "I"
+        },
+        {
+          q: "Which is largest: 3/5, 2/3, 5/9?",
+          answer: "2/3"
+        },
+        {
+          q: "If all VORNs are LUX, and some LUX are KEL, are some VORNs definitely KEL?",
+          answer: "no"
+        },
+        {
+          q: "You flip a fair coin 4 times. Most likely # of heads?",
+          answer: "2"
+        }
+      ];
+      const idx = Math.floor(Math.random() * questions.length);
+      const { q, answer } = questions[idx];
+
+      const overlay = document.createElement("div");
+      overlay.style.position = "fixed";
+      overlay.style.inset = "0";
+      overlay.style.background = "#020617";
+      overlay.style.display = "flex";
+      overlay.style.alignItems = "center";
+      overlay.style.justifyContent = "center";
+      overlay.style.zIndex = "99";
+
+      overlay.innerHTML = `
+        <div style="text-align:center;max-width:360px;">
+          <div style="font-size:14px;color:#9ca3af;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.16em;">Logic Snap</div>
+          <div style="font-size:15px;margin-bottom:10px;">${q}</div>
+          <div style="font-size:11px;color:#9ca3af;margin-bottom:6px;">Answer within ~20 seconds. Don't overthink.</div>
+          <input id="logicInput" type="text" autocomplete="off"
+            style="width:100%;padding:6px 8px;border-radius:999px;border:1px solid #374151;background:#020617;color:#e5e7eb;font-size:14px;text-align:center;"/>
+          <button id="logicSubmit" style="margin-top:8px;border-radius:999px;border:1px solid #4b5563;padding:6px 10px;font-size:12px;background:#020617;color:#e5e7eb;cursor:pointer;">Submit</button>
+        </div>
+      `;
+      document.body.appendChild(overlay);
+      const start = performance.now();
+
+      function finish() {
+        const raw = document.getElementById("logicInput").value.trim();
+        const elapsed = (performance.now() - start) / 1000;
+        const correct = raw.toLowerCase() === answer.toLowerCase();
+        let score = correct ? 1 : 0;
+        if (correct && elapsed > 18) score = 0.6;
+        if (!correct && elapsed < 8) score = 0.4;
+
+        state.logicScore = score;
+        status.textContent = (correct ? "Correct" : "Not quite") +
+          " · speed adjustment: " + (score * 100).toFixed(0) + "%";
+        status.style.color = "#a5b4fc";
+        recomputeScore();
+        overlay.removeEventListener("click", dismissOnBg);
+        overlay.remove();
+      }
+
+      function dismissOnBg(e) {
+        if (e.target === overlay) {
+          finish();
+        }
+      }
+
+      overlay.addEventListener("click", dismissOnBg);
+      overlay.querySelector("#logicSubmit").addEventListener("click", finish);
+      overlay.querySelector("#logicInput").focus();
+    }
+
+    // ---------- Trivia Gauntlet ----------
+    const gauntletQuestions = [
+      {
+        q: "Which planet in our solar system has the most moons?",
+        choices: ["Jupiter", "Saturn", "Neptune", "Mars"],
+        correct: 1,
+        category: "Science"
+      },
+      {
+        q: "What year did the first iPhone launch?",
+        choices: ["2005", "2007", "2009", "2011"],
+        correct: 1,
+        category: "Tech"
+      },
+      {
+        q: "Solve: 7 × 8 − 12 = ?",
+        choices: ["44", "52", "56", "68"],
+        correct: 0,
+        category: "Math"
+      },
+      {
+        q: "Who wrote the novel '1984'?",
+        choices: ["George Orwell", "Aldous Huxley", "Ray Bradbury", "J.R.R. Tolkien"],
+        correct: 0,
+        category: "Literature"
+      },
+      {
+        q: "The capital of Canada is:",
+        choices: ["Toronto", "Vancouver", "Ottawa", "Montreal"],
+        correct: 2,
+        category: "Geography"
+      },
+      {
+        q: "Which organ is primarily responsible for detoxifying chemicals in the human body?",
+        choices: ["Liver", "Kidney", "Lungs", "Spleen"],
+        correct: 0,
+        category: "Medicine"
+      },
+      {
+        q: "Which economist wrote 'The Wealth of Nations'?",
+        choices: ["John Maynard Keynes", "Adam Smith", "Milton Friedman", "Karl Marx"],
+        correct: 1,
+        category: "Economics"
+      },
+      {
+        q: "In basketball, how many points is a shot made from beyond the arc worth?",
+        choices: ["2", "3", "4", "1"],
+        correct: 1,
+        category: "Sports"
+      },
+      {
+        q: "Which musical artist released the album 'Thriller'?",
+        choices: ["Prince", "Michael Jackson", "Madonna", "Stevie Wonder"],
+        correct: 1,
+        category: "Music"
+      },
+      {
+        q: "Which metal is liquid at room temperature?",
+        choices: ["Mercury", "Aluminum", "Sodium", "Zinc"],
+        correct: 0,
+        category: "Science"
+      }
+    ];
+
+    function resetGauntlet(soft) {
+      state.gauntlet.active = false;
+      state.gauntlet.strikes = 0;
+      state.gauntlet.correct = 0;
+      state.gauntlet.wrong = 0;
+      state.gauntlet.questionIndex = null;
+      state.gauntlet.usedIndices = new Set();
+      if (!soft) {
+        state.gauntletDelta = 0;
+        recomputeScore();
+      }
+      updateGauntletMeta();
+      renderStrikes();
+      document.getElementById("gauntletBody").innerHTML =
+        "<p class='mini-main'>Hit <strong>Start Gauntlet</strong> to enter today's run. 3 wrong answers ends it.</p>";
+    }
+
+    function renderStrikes() {
+      const container = document.getElementById("strikeIndicator");
+      const spans = container.querySelectorAll("span");
+      spans.forEach((s, i) => {
+        s.classList.toggle("active", i < state.gauntlet.strikes);
+      });
+    }
+
+    function updateGauntletMeta() {
+      document.getElementById("gauntletMetaLeft").textContent =
+        `Run: ${state.gauntlet.correct} correct · ${state.gauntlet.wrong} wrong`;
+      document.getElementById("gauntletMetaRight").textContent =
+        `Score impact: ${state.gauntletDelta >= 0 ? "+" : ""}${state.gauntletDelta}`;
+    }
+
+    function startGauntlet() {
+      state.gauntlet.active = true;
+      state.gauntlet.strikes = 0;
+      state.gauntlet.correct = 0;
+      state.gauntlet.wrong = 0;
+      state.gauntlet.usedIndices = new Set();
+      state.gauntletDelta = 0;
+      renderStrikes();
+      nextGauntletQuestion();
+    }
+
+    function nextGauntletQuestion() {
+      if (!state.gauntlet.active) return;
+
+      if (state.gauntlet.usedIndices.size === gauntletQuestions.length) {
+        endGauntlet("You cleared the whole pool for this prototype run. Nicely done.");
+        return;
+      }
+
+      let idx;
+      do {
+        idx = Math.floor(Math.random() * gauntletQuestions.length);
+      } while (state.gauntlet.usedIndices.has(idx));
+
+      state.gauntlet.usedIndices.add(idx);
+      state.gauntlet.questionIndex = idx;
+      const q = gauntletQuestions[idx];
+
+      const body = document.getElementById("gauntletBody");
+      body.innerHTML = `
+        <div class="gauntlet-question">${q.q}</div>
+        <div class="gauntlet-meta">Category: ${q.category} · You have ~15 seconds.</div>
+        <div class="choice-row">
+          ${q.choices.map((c, i) => `
+            <button class="choice-btn" data-index="${i}">${c}</button>
+          `).join("")}
+        </div>
+      `;
+
+      const buttons = body.querySelectorAll(".choice-btn");
+      const startTime = performance.now();
+      buttons.forEach(btn => {
+        btn.addEventListener("click", () => {
+          const chosen = parseInt(btn.getAttribute("data-index"), 10);
+          const elapsed = (performance.now() - startTime) / 1000;
+          handleGauntletAnswer(chosen, elapsed);
+        });
+      });
+    }
+
+    function handleGauntletAnswer(choiceIndex, elapsedSeconds) {
+      if (!state.gauntlet.active) return;
+      const idx = state.gauntlet.questionIndex;
+      const q = gauntletQuestions[idx];
+      const correct = choiceIndex === q.correct;
+      let delta = 0;
+
+      if (correct) {
+        state.gauntlet.correct++;
+        // base + speed bonus
+        delta = 8;
+        if (elapsedSeconds < 6) delta += 4;
+        else if (elapsedSeconds < 10) delta += 2;
+      } else {
+        state.gauntlet.wrong++;
+        state.gauntlet.strikes++;
+        delta = -10;
+      }
+
+      state.gauntletDelta += delta;
+      renderStrikes();
+      updateGauntletMeta();
+      recomputeScore();
+
+      const body = document.getElementById("gauntletBody");
+      const feedback = correct ? "Correct." : "Wrong.";
+      const speedNote = elapsedSeconds.toFixed(1) + " s";
+      body.innerHTML = `
+        <div class="gauntlet-question">${feedback} (${speedNote})</div>
+        <div class="gauntlet-meta">Score change: ${delta >= 0 ? "+" : ""}${delta}. Total impact: ${state.gauntletDelta >= 0 ? "+" : ""}${state.gauntletDelta}.</div>
+        <div class="mini-sub">Next question loading…</div>
+      `;
+
+      if (state.gauntlet.strikes >= 3) {
+        setTimeout(() => {
+          endGauntlet("3 strikes – Gauntlet locked for this run. Save your score and come back later.");
+        }, 650);
+      } else {
+        setTimeout(nextGauntletQuestion, 700);
+      }
+    }
+
+    function endGauntlet(message) {
+      state.gauntlet.active = false;
+      updateGauntletMeta();
+      const body = document.getElementById("gauntletBody");
+      body.innerHTML = `
+        <div class="gauntlet-question">${message}</div>
+        <div class="gauntlet-meta">
+          Final run: ${state.gauntlet.correct} correct · ${state.gauntlet.wrong} wrong ·
+          score impact ${state.gauntletDelta >= 0 ? "+" : ""}${state.gauntletDelta}.
+        </div>
+        <div class="mini-sub">Use this as a talking point: high-stakes, timed, multi-subject cognitive trial.</div>
+      `;
+    }
+
+    // ---------- Wire up events ----------
+    document.getElementById("newDayBtn").addEventListener("click", newDay);
+    document.getElementById("saveSnapshotBtn").addEventListener("click", saveSnapshot);
+    document.getElementById("reactionBtn").addEventListener("click", runReactionTest);
+    document.getElementById("memoryBtn").addEventListener("click", runMemoryTest);
+    document.getElementById("logicBtn").addEventListener("click", runLogicTest);
+    document.getElementById("startGauntletBtn").addEventListener("click", startGauntlet);
+    document.getElementById("resetGauntletBtn").addEventListener("click", () => resetGauntlet(false));
+
+    // ---------- Init ----------
+    loadHistory();
+    newDay();
+  </script>
+</body>
+</html>
